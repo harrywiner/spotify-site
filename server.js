@@ -6,8 +6,8 @@ const mysql = require("mysql");
 
 const port = process.env.PORT || 8000;
 
-// https://fast-shore-61140.herokuapp.com/
-// https://git.heroku.com/fast-shore-61140.git
+// https://vast-castle-09510.herokuapp.com/
+// https://git.heroku.com/vast-castle-09510.git
 
 var app = express();
 
