@@ -1,0 +1,59 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Build Database",
+            "program": "${workspaceFolder}/builddb.js",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "args": [
+                "--verbose"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Update",
+            "program": "${workspaceFolder}/update.js",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "args": [
+                "--verbose"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Web",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/server.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Push Wordpress",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/wpsqlupdate.js",
+            "args": [
+                "--file",
+                "public/wp.html",
+                "--verbose",
+                "--local",
+                "false",
+                "--post",
+                "2175"
+            ]
+        }
+    ]
+}

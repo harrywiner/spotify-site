@@ -1,0 +1,28 @@
+{
+  "author": "Spotify",
+  "name": "hello-node",
+  "description": "Basic examples of the Spotify authorization flows through OAuth 2",
+  "version": "0.0.2",
+  "dependencies": {
+    "express": "~4.16.0",
+    "mysql": "^2.18.1",
+    "request": "~2.83.0",
+    "yargs": "^15.3.1"
+  },
+  "main": "server.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pwiner/hello-node.git"
+  },
+  "keywords": [],
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pwiner/hello-node/issues"
+  },
+  "homepage": "https://github.com/pwiner/hello-node#readme"
+}
