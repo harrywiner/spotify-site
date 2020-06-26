@@ -8,3 +8,5 @@
 
 - Recreate SpotifyJS code to setup database directly to heroku \
   -> Ask dad for code to link to jawsdb instead of localhost
+
+- TODO ask dad about where the mysql url?

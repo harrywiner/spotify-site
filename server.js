@@ -16,37 +16,9 @@ app.use(express.static(__dirname + "/"));
 console.log("Listening on " + port);
 app.listen(port);
 
-function GetPhoto() {
-  var options = {
-    url:
-      "https://api.nasa.gov/planetary/apod?api_key=e5uyEaL8r1Tuaujg04A1MEJZRcfAXWgEXxa7FWK9",
-  };
+//hhqku4m4s06d7kkr:qhduvhfosmtue8ka@d9c88q3e09w6fdb2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/fjdra43pw35frotj
 
-  return new Promise(function (resolve, reject) {
-    request.get(options, function (error, response, body) {
-      if (error) {
-        console.log("Error getting photo: " + error);
-        reject(error);
-      } else {
-        console.log(JSON.parse(body));
-        resolve(JSON.parse(body));
-      }
-    });
-  });
-}
-
-app.get("/nasa-photo", function (req, res) {
-  var photoPromise = GetPhoto();
-
-  photoPromise.then((photo) => {
-    res.send({
-      title: photo.title,
-      url: photo.url,
-    });
-  });
-});
-
-function CountPlays(connection) {
+mysql: function CountPlays(connection) {
   return new Promise((resolve, reject) => {
     var query = "SELECT COUNT(*) as playCount FROM PLAYS;";
 
