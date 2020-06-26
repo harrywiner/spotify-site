@@ -68,7 +68,7 @@ async function insertRecents(filename) {
     recentPlays[i].trackName = formatString(recentPlays[i].trackName);
     recentPlays[i].artistName = formatString(recentPlays[i].artistName);
     await addToDatabase(recentPlays[i]);
-    await tools.wait(50);
+    await tools.wait(40);
   }
 }
 // todo make i value in  for loop determine amount
