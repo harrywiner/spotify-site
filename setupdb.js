@@ -1,5 +1,6 @@
 const fs = require("fs");
 const mysql = require("mysql");
+const tools = require("./tools");
 
 function ReadRecents(filename) {
   let rawdata = fs.readFileSync(filename);
@@ -31,14 +32,14 @@ con.query(setup2, function (err, result, fields) {
   if (err) throw err;
 });
 
-function addToDatabase(play) {
+async function addToDatabase(play) {
   var sql =
     "INSERT INTO plays (trackName, artistName, endTime, msPlayed) VALUES (?, ?, ?, ?);";
   var inputs = [play.trackName, play.artistName, play.endTime, play.msPlayed];
 
   sql = con.format(sql, inputs);
 
-  con.query(sql, function (err, result, fields) {
+  await con.query(sql, function (err, result, fields) {
     if (err) throw err;
   });
 }
@@ -61,12 +62,13 @@ function formatString(str) {
   return formatStr;
 }
 
-function insertRecents(filename) {
+async function insertRecents(filename) {
   var recentPlays = ReadRecents(filename);
-  for (i = 0; i < recentPlays.length; i++) {
+  for (i = 0; i < /* recentPlays.length */ 50; i++) {
     recentPlays[i].trackName = formatString(recentPlays[i].trackName);
     recentPlays[i].artistName = formatString(recentPlays[i].artistName);
-    addToDatabase(recentPlays[i]);
+    await addToDatabase(recentPlays[i]);
+    await tools.wait(50);
   }
 }
 // todo make i value in  for loop determine amount
