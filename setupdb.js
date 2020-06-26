@@ -64,7 +64,7 @@ function formatString(str) {
 
 async function insertRecents(filename) {
   var recentPlays = ReadRecents(filename);
-  for (i = 0; i < /* recentPlays.length */ 50; i++) {
+  for (i = 0; i < recentPlays.length; i++) {
     recentPlays[i].trackName = formatString(recentPlays[i].trackName);
     recentPlays[i].artistName = formatString(recentPlays[i].artistName);
     await addToDatabase(recentPlays[i]);
@@ -79,9 +79,11 @@ async function insertRecents(filename) {
   insertRecents("./json/StreamingHistory2.json");
   insertRecents("./json/StreamingHistory3.json");
 
-  con.end();
+  
   */
 
 insertRecents("./json/sample.json");
 
 selectAll();
+
+con.end();
