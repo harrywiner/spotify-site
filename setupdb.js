@@ -81,9 +81,9 @@ async function insertRecents(filename) {
 
   
   */
+async function main() {
+  await insertRecents("./json/sample.json");
+  con.end();
+}
 
-insertRecents("./json/sample.json");
-
-selectAll();
-
-con.end();
+main();
