@@ -62,13 +62,13 @@ function formatString(str) {
   return formatStr;
 }
 
-async function insertRecents(filename, wait) {
+async function insertRecents(filename) {
   var recentPlays = ReadRecents(filename);
   for (i = 0; i < recentPlays.length; i++) {
     recentPlays[i].trackName = formatString(recentPlays[i].trackName);
     recentPlays[i].artistName = formatString(recentPlays[i].artistName);
     await addToDatabase(recentPlays[i]);
-    await tools.wait(wait);
+    await tools.wait(10);
   }
 }
 // todo make i value in  for loop determine amount
@@ -82,9 +82,10 @@ async function insertRecents(filename, wait) {
   
   */
 
-const argv = require("yargs").argv;
 async function main() {
-  await insertRecents("./json/sample.json", argv.wait);
+  await insertRecents("./json/StreamingHistory1.json");
+  await insertRecents("./json/StreamingHistory2.json");
+  await insertRecents("./json/StreamingHistory3.json");
   con.end();
 }
 
