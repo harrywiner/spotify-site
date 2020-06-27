@@ -26,7 +26,7 @@ function CountPlays(connection) {
 
     connection.query(query, function (err, result) {
       if (err) {
-        console.log("Count Recents error: " + err);
+        console.log("Count Plays error: " + err);
 
         reject();
       } else {
@@ -48,7 +48,7 @@ function MostPlayed(connection, limit, offset) {
 
     connection.query(query, function (err, result) {
       if (err) {
-        console.log("Count Recents error: " + err);
+        console.log("Most Played error: " + err);
 
         reject();
       } else {
@@ -94,8 +94,6 @@ app.get("/most-played", function (req, res) {
     );
 
     playPromise.then((plays) => {
-      console.log("10 most played: " + JSON.stringify(plays));
-
       res.send({
         hello: plays,
       });
