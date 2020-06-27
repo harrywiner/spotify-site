@@ -18,9 +18,9 @@ app.listen(port);
 
 //hhqku4m4s06d7kkr:qhduvhfosmtue8ka@d9c88q3e09w6fdb2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/fjdra43pw35frotj
 
-mysql: function CountPlays(connection) {
+function CountPlays(connection) {
   return new Promise((resolve, reject) => {
-    var query = "SELECT COUNT(*) as playCount FROM PLAYS;";
+    var query = "SELECT COUNT(*) as playCount FROM plays;";
 
     console.log(query);
 

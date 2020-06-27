@@ -62,13 +62,13 @@
             var cell3 = row.insertCell(2);
             var cell4 = row.insertCell(3);
             cell1.innerHTML = i + 1;
-            cell2.innerHTML = removeDash(data.hello[i].trackName);
+            cell2.innerHTML = formatTrackName(data.hello[i].trackName);
             cell3.innerHTML = data.hello[i].artistName;
             cell4.innerHTML = data.hello[i].times;
           }
         });
       };
-      function removeDash(str) {
+      function formatTrackName(str) {
         if (str.includes("-")) {
           str = str.substring(0, str.indexOf("-") - 1);
         }
