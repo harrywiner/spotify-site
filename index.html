@@ -1,36 +1,24 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>Harry's Spotify History</title>
     <link
       rel="stylesheet"
       href="//netdna.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
     />
     <link rel="stylesheet" href="main.css" />
-
-    <style>
-      h1.display-4 {
-        color: #ffffff;
-        font-family: "Comic Sans MS";
-      }
-
-      div.jumbotron {
-        background-color: #1db954;
-        border: 1px solid blue;
-        border-radius: 20px;
-      }
-    </style>
   </head>
 
-  <body>
+  <body style="background-color: #ffffff;">
     <div class="container">
       <div class="jumbotron">
         <h1 class="display-4" id="status-message">Total number of plays:</h1>
       </div>
-      <button class="btn btn-primary mb-2" id="displaydb">
+      <button class="btn btn-light-green mb-2" id="displaydb">
         Display 20 most played
       </button>
       <table class="table table-striped" id="table">
-        <thead class="thead-dark">
+        <thead class="thead-green">
           <tr>
             <th scope="col">#</th>
             <th scope="col">trackName</th>
@@ -55,7 +43,7 @@
 
           var currentText = $("#status-message").text();
 
-          $("#status-message").text(currentText + data.hello);
+          $("#status-message").text(currentText + " " + data.hello);
         });
       });
 
@@ -74,12 +62,18 @@
             var cell3 = row.insertCell(2);
             var cell4 = row.insertCell(3);
             cell1.innerHTML = i + 1;
-            cell2.innerHTML = data.hello[i].trackName;
+            cell2.innerHTML = removeDash(data.hello[i].trackName);
             cell3.innerHTML = data.hello[i].artistName;
             cell4.innerHTML = data.hello[i].times;
           }
         });
       };
+      function removeDash(str) {
+        if (str.includes("-")) {
+          str = str.substring(0, str.indexOf("-") - 1);
+        }
+        return str;
+      }
     </script>
   </body>
 </html>

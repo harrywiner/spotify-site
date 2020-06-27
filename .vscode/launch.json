@@ -7,6 +7,13 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Test regextest",
+      "program": "${workspaceFolder}/regextest.js",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Test setupdb",
       "program": "${workspaceFolder}/setupdb.js",
       "cwd": "${workspaceFolder}"
