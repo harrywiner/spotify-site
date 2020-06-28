@@ -14,7 +14,7 @@
       <div class="jumbotron">
         <h1 class="display-4" id="status-message">Total number of plays:</h1>
       </div>
-      <button class="btn btn-light-green mb-2" id="displaydb">
+      <button class="btn btn-light-green mb-2" id="most-played">
         Display 100 most played
       </button>
       <table class="table table-striped" id="table">
@@ -35,24 +35,22 @@
       type="text/javascript"
     ></script>
     <script>
-      $(document).ready(function () {
+      $(document).ready(() => {
         $.ajax({
           url: "/count-total-plays/",
         }).done(function (data) {
-          console.log("Returned from SQL Query from " + data.hello);
+          console.log("Returned from SQL Query from " + data.playCount);
 
           var currentText = $("#status-message").text();
 
-          $("#status-message").text(currentText + " " + data.hello);
+          $("#status-message").text(currentText + " " + data.playCount);
         });
       });
 
-      document.getElementById("displaydb").onclick = function () {
+      $("#most-played").click(() => {
         $.ajax({
           url: "/most-played/?limit=100&offset=0",
-        }).done(function (data) {
-          console.log("Returned from Most Played Query: " + data.hello);
-
+        }).done((data) => {
           var table = document.getElementById("table-body");
 
           for (var i = 0; i < 100; i++) {
@@ -62,12 +60,12 @@
             var cell3 = row.insertCell(2);
             var cell4 = row.insertCell(3);
             cell1.innerHTML = i + 1;
-            cell2.innerHTML = formatTrackName(data.hello[i].trackName);
-            cell3.innerHTML = data.hello[i].artistName;
-            cell4.innerHTML = data.hello[i].times;
+            cell2.innerHTML = formatTrackName(data.mostPlayed[i].trackName);
+            cell3.innerHTML = data.mostPlayed[i].artistName;
+            cell4.innerHTML = data.mostPlayed[i].times;
           }
         });
-      };
+      });
       function formatTrackName(str) {
         if (str.includes("-")) {
           str = str.substring(0, str.indexOf("-") - 1);

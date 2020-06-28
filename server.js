@@ -16,8 +16,6 @@ app.use(express.static(__dirname + "/"));
 console.log("Listening on " + port);
 app.listen(port);
 
-//hhqku4m4s06d7kkr:qhduvhfosmtue8ka@d9c88q3e09w6fdb2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/fjdra43pw35frotj
-
 function CountPlays(connection) {
   return new Promise((resolve, reject) => {
     var query = "SELECT COUNT(*) as playCount FROM plays;";
@@ -44,8 +42,6 @@ function MostPlayed(connection, limit, offset) {
 
     query = connection.format(query, inputs);
 
-    console.log(query);
-
     connection.query(query, function (err, result) {
       if (err) {
         console.log("Most Played error: " + err);
@@ -64,11 +60,9 @@ app.get("/count-total-plays", function (req, res) {
   dbPromise.then((connection) => {
     var countPromise = CountPlays(connection);
 
-    countPromise.then((playCount) => {
-      console.log("Number of plays: " + playCount);
-
+    countPromise.then((count) => {
       res.send({
-        hello: playCount,
+        playCount: count,
       });
 
       connection.end();
@@ -79,8 +73,6 @@ app.get("/count-total-plays", function (req, res) {
 });
 
 app.get("/most-played", function (req, res) {
-  console.log("mostplayed called");
-
   var dbPromise = tools.DBConnect("spotify");
 
   console.log("Offset: " + req.query.offset);
@@ -95,7 +87,7 @@ app.get("/most-played", function (req, res) {
 
     playPromise.then((plays) => {
       res.send({
-        hello: plays,
+        mostPlayed: plays,
       });
 
       connection.end();
