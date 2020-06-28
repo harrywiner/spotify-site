@@ -7,22 +7,8 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Test regextest",
-      "program": "${workspaceFolder}/regextest.js",
-      "cwd": "${workspaceFolder}"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Test setupdb",
+      "name": "Debug setupdb",
       "program": "${workspaceFolder}/setupdb.js",
-      "cwd": "${workspaceFolder}"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Test Jaws",
-      "program": "${workspaceFolder}/jawstest.js",
       "cwd": "${workspaceFolder}"
     },
     {
