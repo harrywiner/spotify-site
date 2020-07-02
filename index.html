@@ -14,18 +14,16 @@
       <div class="jumbotron">
         <h1 class="display-4" id="status-message">Total number of plays:</h1>
       </div>
-      <button class="btn btn-light-green mb-2" id="most-played">
-        Display 100 most played
-      </button>
+      <div>
+        <button class="btn btn-light-green mb-2" id="most-played">
+          Display 100 most played
+        </button>
+        <button class="btn btn-light-green mb-2" id="play-time">
+          Display listen time
+        </button>
+      </div>
       <table class="table table-striped" id="table">
-        <thead class="thead-green">
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">trackName</th>
-            <th scope="col">artistName</th>
-            <th scope="col">timesPlayed</th>
-          </tr>
-        </thead>
+        <thead class="thead-green"></thead>
         <tbody id="table-body"></tbody>
       </table>
     </div>
@@ -51,21 +49,61 @@
         $.ajax({
           url: "/most-played/?limit=100&offset=0",
         }).done((data) => {
-          var table = document.getElementById("table-body");
+          data.mostPlayed.map((element) => {
+            element.trackName = formatTrackName(element.trackName);
+            return element;
+          });
 
-          for (var i = 0; i < 100; i++) {
-            var row = table.insertRow(i);
-            var cell1 = row.insertCell(0);
-            var cell2 = row.insertCell(1);
-            var cell3 = row.insertCell(2);
-            var cell4 = row.insertCell(3);
-            cell1.innerHTML = i + 1;
-            cell2.innerHTML = formatTrackName(data.mostPlayed[i].trackName);
-            cell3.innerHTML = data.mostPlayed[i].artistName;
-            cell4.innerHTML = data.mostPlayed[i].times;
-          }
+          table = document.getElementById("table");
+          table.innerHTML = json2Table(data.mostPlayed);
         });
       });
+      $("#play-time").click(() => {
+        $.ajax({
+          url: "/play-time/?limit=100&offset=0",
+        }).done((data) => {
+          data.playTime.map((element) => {
+            element.trackName = formatTrackName(element.trackName);
+            return element;
+          });
+
+          table = document.getElementById("table");
+          table.innerHTML = json2Table(data.playTime);
+        });
+      });
+
+      function json2Table(json) {
+        let cols = Object.keys(json[0]);
+
+        //Map over columns, make headers,join into string
+        let headerRow = cols.map((col) => `<th>${col}</th>`).join("");
+
+        //map over array of json objs, for each row(obj) map over column values,
+        //and return a td with the value of that object for its column
+        //take that array of tds and join them
+        //then return a row of the tds
+        //finally join all the rows together
+        let rows = json
+          .map((row) => {
+            let tds = cols.map((col) => `<td>${row[col]}</td>`).join("");
+            return `<tr>${tds}</tr>`;
+          })
+          .join("");
+
+        //build the table
+        const table = `
+            <table>
+                <thead>
+                    <tr>${headerRow}</tr>
+                <thead>
+                <tbody>
+                    ${rows}
+                <tbody>
+            <table>`;
+
+        return table;
+      }
+
       function formatTrackName(str) {
         if (str.includes("-")) {
           str = str.substring(0, str.indexOf("-") - 1);

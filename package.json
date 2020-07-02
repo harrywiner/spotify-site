@@ -1,6 +1,6 @@
 {
-  "author": "Spotify",
-  "name": "hello-node",
+  "author": "Harry Winer",
+  "name": "spotify",
   "description": "Basic examples of the Spotify authorization flows through OAuth 2",
   "version": "0.0.2",
   "dependencies": {

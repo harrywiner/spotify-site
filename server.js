@@ -54,6 +54,26 @@ function MostPlayed(connection, limit, offset) {
   });
 }
 
+function PlayTime(connection, limit, offset) {
+  return new Promise((resolve, reject) => {
+    var query =
+      "select trackName, artistName, sum(msPlayed) as timeListened from plays group by trackname, artistName order by timeListened desc limit ? offset ?;";
+    var inputs = [limit, offset];
+
+    query = connection.format(query, inputs);
+
+    connection.query(query, function (err, result) {
+      if (err) {
+        console.log("Most Played error: " + err);
+
+        reject();
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}
+
 app.get("/count-total-plays", function (req, res) {
   var dbPromise = tools.DBConnect("spotify");
 
@@ -88,6 +108,32 @@ app.get("/most-played", function (req, res) {
     playPromise.then((plays) => {
       res.send({
         mostPlayed: plays,
+      });
+
+      connection.end();
+
+      return;
+    });
+  });
+});
+
+app.get("/play-time", function (req, res) {
+  var dbPromise = tools.DBConnect("spotify");
+
+  console.log("Offset: " + req.query.offset);
+  console.log("Limit: " + req.query.limit);
+
+  dbPromise.then((connection) => {
+    var playPromise = PlayTime(
+      connection,
+      parseInt(req.query.limit),
+      parseInt(req.query.offset)
+    );
+
+    playPromise.then((plays) => {
+      console.log(JSON.stringify(plays));
+      res.send({
+        playTime: plays,
       });
 
       connection.end();
