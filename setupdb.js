@@ -34,7 +34,8 @@ con.query(setup2, function (err, result, fields) {
 
 async function addToDatabase(play) {
   var sql =
-    "INSERT INTO plays (trackName, artistName, endTime, msPlayed) VALUES (?, ?, ?, ?);";
+    "
+    INSERT INTO plays (trackName, artistName, endTime, msPlayed) VALUES (?, ?, ?, ?);";
   var inputs = [play.trackName, play.artistName, play.endTime, play.msPlayed];
 
   sql = con.format(sql, inputs);

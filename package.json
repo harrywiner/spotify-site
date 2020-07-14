@@ -5,6 +5,7 @@
   "version": "0.0.2",
   "dependencies": {
     "express": "~4.16.0",
+    "moment": "^2.27.0",
     "mysql": "^2.18.1",
     "request": "~2.83.0",
     "yargs": "^15.3.1"
