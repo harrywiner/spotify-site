@@ -34,8 +34,7 @@ con.query(setup2, function (err, result, fields) {
 
 async function addToDatabase(play) {
   var sql =
-    "
-    INSERT INTO plays (trackName, artistName, endTime, msPlayed) VALUES (?, ?, ?, ?);";
+    "INSERT INTO plays (trackName, artistName, endTime, msPlayed) VALUES (?, ?, ?, ?);";
   var inputs = [play.trackName, play.artistName, play.endTime, play.msPlayed];
 
   sql = con.format(sql, inputs);
@@ -69,7 +68,7 @@ async function insertRecents(filename) {
     recentPlays[i].trackName = formatString(recentPlays[i].trackName);
     recentPlays[i].artistName = formatString(recentPlays[i].artistName);
     await addToDatabase(recentPlays[i]);
-    await tools.wait(10);
+    //await tools.wait(10);
   }
 }
 // todo make i value in  for loop determine amount

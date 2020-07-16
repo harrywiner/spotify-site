@@ -56,6 +56,9 @@
           });
           console.log(doLineNumbers(data.mostPlayed));
           table = document.getElementById("table");
+
+          var headers = ["#", "trackName", "artistName", "timesPlayed"];
+          //table.innerHTML = harry2Table(table, data.mostPlayed, headers);
           table.innerHTML = json2Table(data.mostPlayed);
         });
       });
