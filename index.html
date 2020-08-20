@@ -58,8 +58,8 @@
           table = document.getElementById("table");
 
           var headers = ["#", "trackName", "artistName", "timesPlayed"];
-          //table.innerHTML = harry2Table(table, data.mostPlayed, headers);
-          table.innerHTML = json2Table(data.mostPlayed);
+          table.innerHTML = harry2Table(table, data.mostPlayed, headers);
+          ///////table.innerHTML = json2Table(data.mostPlayed);
         });
       });
 
@@ -82,6 +82,7 @@
         });
       });
 
+      // https://datatables.net/
       function harry2Table(table, headers, json) {
         json.map((play, numPlay) => {
           var row = table.insertRow(numPlay);
