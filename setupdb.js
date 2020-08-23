@@ -2,7 +2,7 @@ const fs = require("fs");
 const mysql = require("mysql");
 const tools = require("./tools");
 
-function ReadRecents(filename) {
+function ReadHistory(filename) {
   let rawdata = fs.readFileSync(filename);
 
   let recentPlays = JSON.parse(rawdata);
@@ -62,8 +62,8 @@ function formatString(str) {
   return formatStr;
 }
 
-async function insertRecents(filename) {
-  var recentPlays = ReadRecents(filename);
+async function insertHistory(filename) {
+  var recentPlays = ReadHistory(filename);
   for (i = 0; i < recentPlays.length; i++) {
     recentPlays[i].trackName = formatString(recentPlays[i].trackName);
     recentPlays[i].artistName = formatString(recentPlays[i].artistName);
@@ -72,20 +72,21 @@ async function insertRecents(filename) {
   }
 }
 // todo make i value in  for loop determine amount
-// insertRecents("./json/StreamingHistory0.json");
+// insertHistory("./json/StreamingHistory0.json");
 
 /*
-  insertRecents("./json/StreamingHistory1.json");
-  insertRecents("./json/StreamingHistory2.json");
-  insertRecents("./json/StreamingHistory3.json");
+  insertHistory("./json/StreamingHistory1.json");
+  insertHistory("./json/StreamingHistory2.json");
+  insertHistory("./json/StreamingHistory3.json");
 
   
   */
 
 async function main() {
-  await insertRecents("./json/StreamingHistory1.json");
-  await insertRecents("./json/StreamingHistory2.json");
-  await insertRecents("./json/StreamingHistory3.json");
+  await insertHistory("./json/StreamingHistory0.json");
+  await insertHistory("./json/StreamingHistory1.json");
+  await insertHistory("./json/StreamingHistory2.json");
+  await insertHistory("./json/StreamingHistory3.json");
   con.end();
 }
 

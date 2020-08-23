@@ -4,6 +4,7 @@
   "description": "Basic examples of the Spotify authorization flows through OAuth 2",
   "version": "0.0.2",
   "dependencies": {
+    "datatables": "^1.10.18",
     "express": "~4.16.0",
     "moment": "^2.27.0",
     "mon": "0.0.8",

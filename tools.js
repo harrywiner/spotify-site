@@ -218,7 +218,7 @@ module.exports = {
     });
   },
 
-  ReadRecents: function (inputFilename) {
+  ReadHistory: function (inputFilename) {
     // Return new promise
     return new Promise(function (resolve, reject) {
       // Do async job
