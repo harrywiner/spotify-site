@@ -1,7 +1,7 @@
 {
   "author": "Harry Winer",
   "name": "spotify",
-  "description": "Basic examples of the Spotify authorization flows through OAuth 2",
+  "description": "My Spotify listening history",
   "version": "0.0.2",
   "dependencies": {
     "datatables": "^1.10.18",
@@ -17,15 +17,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/pwiner/hello-node.git"
-  },
-  "keywords": [],
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/pwiner/hello-node/issues"
-  },
-  "homepage": "https://github.com/pwiner/hello-node#readme"
+  }
 }
