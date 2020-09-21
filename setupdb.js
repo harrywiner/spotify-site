@@ -83,7 +83,7 @@ async function insertHistory(filename) {
   */
 
 async function main() {
-  await insertHistory("./json/StreamingHistory0.json");
+  //await insertHistory("./json/StreamingHistory0.json");
   await insertHistory("./json/StreamingHistory1.json");
   await insertHistory("./json/StreamingHistory2.json");
   await insertHistory("./json/StreamingHistory3.json");
