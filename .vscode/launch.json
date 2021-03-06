@@ -11,12 +11,18 @@
       "program": "${workspaceFolder}/mmt.js",
       "cwd": "${workspaceFolder}"
     },
-
     {
       "type": "node",
       "request": "launch",
       "name": "Debug setupdb",
       "program": "${workspaceFolder}/setupdb.js",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug testdb",
+      "program": "${workspaceFolder}/testDB.js",
       "cwd": "${workspaceFolder}"
     },
     {

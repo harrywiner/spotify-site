@@ -1,31 +1,9 @@
 const fs = require("fs");
 const mysql = require("mysql");
+const { DBConnect } = require("./tools");
 const tools = require("./tools");
 
-var dbURL = process.env.JAWSDB_URL;
-
-if (dbURL == null || dbURL == "")
-  dbURL = "mysql://root:harry4657@localhost:3306/" + "spotify";
-
-con = mysql.createConnection(dbURL);
-
-con.connect(function (err) {
-  if (err) throw err;
-});
-
-var setup = "DROP TABLE plays;";
-var setup2 =
-  "CREATE TABLE plays (playID INT AUTO_INCREMENT,trackName varchar (32),artistName varchar (32),endTime varchar (32),msPlayed INT,PRIMARY KEY (playID))";
-
-con.query(setup, function (err, result, fields) {
-  if (err) throw err;
-});
-
-con.query(setup2, function (err, result, fields) {
-  if (err) throw err;
-});
-
-async function insertPlay(play) {
+async function insertPlay(play, con) {
   var sql =
     "INSERT INTO plays (trackName, artistName, endTime, msPlayed) VALUES (?, ?, ?, ?);";
   var inputs = [play.trackName, play.artistName, play.endTime, play.msPlayed];
@@ -55,43 +33,67 @@ function formatString(str) {
   return formatStr;
 }
 
-async function insertHistory(filename) {
+async function insertHistory(filename, con) {
   var plays = tools.ReadHistory(filename);
 
-  plays.forEach(async (element) => {
-    var data = {
-      trackName: formatString(element.trackName),
-      artistName: formatString(element.artistName),
-      endTime: element.endTime,
-      msPlayed: element.msPlayed,
-    };
+  plays.then((data) => {
+    data.forEach(async (element) => {
+      var track = {
+        trackName: formatString(element.trackName),
+        artistName: formatString(element.artistName),
+        endTime: element.endTime,
+        msPlayed: element.msPlayed,
+      };
 
-    await insertPlay(data);
+      await insertPlay(track, con);
+    })
+
+
     //await tools.wait(10);
   });
   console.log("file complete " + filename)
 }
-// todo make i value in  for loop determine amount
-// insertHistory("./json/StreamingHistory0.json");
 
-/*
-  insertHistory("./json/StreamingHistory1.json");
-  insertHistory("./json/StreamingHistory2.json");
-  insertHistory("./json/StreamingHistory3.json");
+async function createTable(con) {
+  var setup = "DROP TABLE plays;";
+  var setup2 =
+    "CREATE TABLE plays (playID INT AUTO_INCREMENT,trackName varchar (32),artistName varchar (32),endTime varchar (32),msPlayed INT,PRIMARY KEY (playID))";
 
-  
-  */
 
+
+  return new Promise(function (resolve, reject) {
+    con.query(setup, function (err, result, fields) {
+      if (err) throw err;
+
+      con.query(setup2, function (err, result, fields) {
+        if (err) {
+          reject(null)
+        };
+        console.log("create table result: " + result)
+        resolve(null)
+      });
+    });
+
+
+  });
+}
+
+// timer stopped at 1 hour 45 mins for full upload to micro tier
 async function main() {
   //await insertHistory("./json/StreamingHistory0.json");
-  await insertHistory("./json/StreamingHistory1.json");
-  await insertHistory("./json/StreamingHistory2.json");
-  await insertHistory("./json/StreamingHistory3.json");
-  await insertHistory("./json/StreamingHistory4.json");
-  await insertHistory("./json/StreamingHistory5.json");
-  await insertHistory("./json/StreamingHistory6.json");
+  con = await DBConnect("spotify")
 
-  con.end();
+  createTable(con).then(() => {
+    insertHistory("./json/StreamingHistory1.json", con);
+    insertHistory("./json/StreamingHistory2.json", con);
+    insertHistory("./json/StreamingHistory3.json", con);
+    insertHistory("./json/StreamingHistory4.json", con);
+    insertHistory("./json/StreamingHistory5.json", con);
+    insertHistory("./json/StreamingHistory6.json", con);
+  })
+
+
+  //con.end();
 }
 
 main();

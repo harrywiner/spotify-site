@@ -2,6 +2,7 @@ const yargs = require("yargs");
 const mysql = require("mysql");
 var request = require("request");
 const fs = require("fs");
+require('dotenv').config()
 
 module.exports = {
   ParseCommandLine: function () {
@@ -51,12 +52,13 @@ module.exports = {
   },
 
   DBConnect: function (dbName) {
-    var dbURL = process.env.JAWSDB_URL;
-
-    if (dbURL == null || dbURL == "")
-      dbURL = "mysql://root:harry4657@localhost:3306/" + dbName;
-
-    connection = mysql.createConnection(dbURL);
+    var connection = mysql.createConnection({
+      host: process.env.DB_URL,
+      user: process.env.DB_USR,
+      password: process.env.DB_PWD,
+      port: 3306,
+      database: dbName
+    });
 
     return new Promise(function (resolve, reject) {
       connection.connect((error) => {
@@ -224,7 +226,6 @@ module.exports = {
       // Do async job
       let rawdata = fs.readFileSync(inputFilename);
       let recentPlays = JSON.parse(rawdata);
-      console.log(recentPlays);
       resolve(recentPlays);
     });
   },
