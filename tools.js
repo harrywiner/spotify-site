@@ -226,44 +226,98 @@ module.exports = {
       // Do async job
       let rawdata = fs.readFileSync(inputFilename);
       let recentPlays = JSON.parse(rawdata);
+
       resolve(recentPlays);
     });
   },
 
-  client_id: "acf89dbd4fe44a44b5943438f143d39a", // Your client id
-  client_secret: "39a473f3598c4e5ebe4b4f2e5e3f6ebb", // Your secret
-
-  refresh_token:
-    "AQCAEKgjJ9ZXj443dSGFxSSSrSSkhwlfnKWhn9JO2NUFoGJztFjoPVS5QC7ETq8W_YIT6vn78qAgTZ-2ageZJ9Hhljd436fPSBJCLulkjvt6er5UnEIXRzgyI8J7G493hT0",
-
-  UpdateToken: function () {
-    // Setting URL and headers for request
-
+  RefreshToken: function (token) {
     var authOptions = {
-      url: "https://accounts.spotify.com/api/token",
-      headers: {
-        Authorization:
-          "Basic " +
-          Buffer.from(this.client_id + ":" + this.client_secret).toString(
-            "base64"
-          ),
-      },
+      url: 'https://accounts.spotify.com/api/token',
+      headers: { 'Authorization': 'Basic ' + (new Buffer(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET).toString('base64')) },
       form: {
-        grant_type: "refresh_token",
-        refresh_token: this.refresh_token,
+        grant_type: 'refresh_token',
+        refresh_token: token
       },
-      json: true,
+      json: true
     };
 
-    // Return new promise
-    return new Promise(function (resolve, reject) {
-      // Do async job
+    return new Promise((resolve, reject) => {
       request.post(authOptions, function (error, response, body) {
-        if (error) {
-          console.log("Error getting refresh token: " + error);
-          reject(error);
+        if (!error && response.statusCode === 200) {
+          var access_token = body.access_token;
+          resolve(access_token)
         } else {
-          resolve(body.access_token);
+          reject("Error " + response.statusCode + body.error_description)
+        }
+      });
+    })
+
+  },
+
+  generateRandomString: function (length) {
+    var text = '';
+    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+    for (var i = 0; i < length; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+  },
+
+  CountPlays: function (connection) {
+    return new Promise((resolve, reject) => {
+      var query = "SELECT COUNT(*) as playCount FROM plays;";
+
+      console.log(query);
+
+      connection.query(query, function (err, result) {
+        if (err) {
+          console.log("Count Plays error: " + err);
+
+          reject();
+        } else {
+          resolve(result[0].playCount);
+        }
+      });
+    });
+  },
+
+  MostPlayed: function (connection, limit, offset) {
+    return new Promise((resolve, reject) => {
+      var query =
+        "select trackName, artistName, count(*) as times from plays where msPlayed >= 10000 group by trackName, artistName order by times desc LIMIT ? OFFSET ?;";
+      var inputs = [limit, offset];
+
+      query = connection.format(query, inputs);
+
+      connection.query(query, function (err, result) {
+        if (err) {
+          console.log("Most Played error: " + err);
+
+          reject();
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  },
+
+  PlayTime: function (connection, limit, offset) {
+    return new Promise((resolve, reject) => {
+      var query =
+        "select trackName, artistName, sum(msPlayed) as timeListened from plays group by trackname, artistName order by timeListened desc limit ? offset ?;";
+      var inputs = [limit, offset];
+
+      query = connection.format(query, inputs);
+
+      connection.query(query, function (err, result) {
+        if (err) {
+          console.log("Most Played error: " + err);
+
+          reject();
+        } else {
+          resolve(result);
         }
       });
     });

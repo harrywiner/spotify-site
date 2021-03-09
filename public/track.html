@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Most Played Track</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </head>
+</head>
+
+<body>
+    <div class="parent">
+        <div class="components">
+            <div class="image">
+                <img id="cover" class="cover" src="photograph.jpg" width="400" height="400">
+            </div>
+
+            <div class="description">
+                <p id="trackName" class="info name">Jimi Thing</p>
+                <p id="artistName" class="info artist">Dave Matthews Band</p>
+                <p></p>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        $(document).ready(() => {
+            $.ajax({
+                url: "/currently-playing/",
+            }).done(function (current_data) {
+
+                if (current_data) {
+                    console.log("from currently playing")
+                    $("#cover").attr("src", current_data.coverURL);
+                    $("#trackName").text(current_data.trackName);
+                    $("#artistName").text(current_data.artistName);
+                } else {
+                    console.log("from most recent")
+                    // if nothing is currently playing
+                    $.ajax({
+                        url: '/most-recent'
+                    }).done((recent_data) => {
+                        $("#cover").attr("src", recent_data.coverURL);
+                        $("#trackName").text(recent_data.trackName);
+                        $("#artistName").text(recent_data.artistName);
+                    })
+                }
+            });
+        });
+    </script>
+</body>
