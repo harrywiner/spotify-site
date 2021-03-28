@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Harry's Spotify History</title>
+    <link
+      rel="stylesheet"
+      href="//netdna.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="main.css" />
+  </head>
+
+  <body style="background-color: #ffffff">
+    <div class="container">
+      <div class="jumbotron">
+        <h1 class="display-4" id="status-message">Total number of plays:</h1>
+      </div>
+      <div>
+        <button class="btn btn-light-green mb-2" id="most-played">
+          Display 100 most played
+        </button>
+        <button class="btn btn-light-green mb-2" id="play-time">
+          Display listen time
+        </button>
+      </div>
+      <table class="table table-striped" id="table">
+        <thead class="thead-green"></thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
+
+    <script
+      src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
+      type="text/javascript"
+    ></script>
+
+    <script>
+      $(document).ready(() => {
+        $.ajax({
+          url: "/count-total-plays/",
+        }).done(function (data) {
+          console.log("Returned from SQL Query from " + data.playCount);
+
+          var currentText = $("#status-message").text();
+
+          $("#status-message").text(currentText + " " + data.playCount);
+        });
+      });
+
+      $("#most-played").click(() => {
+        $.ajax({
+          url: "/most-played/?limit=100&offset=0",
+        }).done((data) => {
+          data.mostPlayed.map((element) => {
+            element.trackName = formatTrackName(element.trackName);
+            return element;
+          });
+          console.log(doLineNumbers(data.mostPlayed));
+          table = document.getElementById("table");
+
+          var headers = ["#", "trackName", "artistName", "timesPlayed"];
+          //table.innerHTML = harry2Table(table, data.mostPlayed, headers);
+          table.innerHTML = json2Table(data.mostPlayed);
+        });
+      });
+
+      $("#play-time").click(() => {
+        $.ajax({
+          url: "/play-time/?limit=100&offset=0",
+        }).done((data) => {
+          data.playTime.map((element) => {
+            element.trackName = formatTrackName(element.trackName);
+            return element;
+          });
+
+          data.playTime.map((obj) => {
+            let ms = obj.timeListened;
+            obj.timeListened = FormatMS(ms);
+          });
+
+          table = document.getElementById("table");
+          table.innerHTML = json2Table(data.playTime);
+        });
+      });
+
+      // https://datatables.net/
+      function harry2Table(table, headers, json) {
+        json.map((play, numPlay) => {
+          var row = table.insertRow(numPlay);
+          var num = row.insertCell(0);
+          num.innerHTML = numPlay;
+          headers.forEach((element, index) => {
+            var cell = row.insertCell(index);
+            cell.innerHTML = play[element];
+          });
+        });
+      }
+
+      function doLineNumbers(json) {
+        return json.map((row, index) => Object.assign(row, { "#": index + 1 }));
+      }
+
+      function json2Table(json) {
+        var cols = Object.keys(json[0]);
+
+        //Map over columns, make headers,join into string
+        let headerRow = cols.map((col) => `<th>${col}</th>`).join("");
+
+        //map over array of json objs, for each row(obj) map over column values,
+        //and return a td with the value of that object for its column
+        //take that array of tds and join them
+        //then return a row of the tds
+        //finally join all the rows together
+        let rows = json
+          .map((row, index) => {
+            let tds = cols.map((col) => `<td>${row[col]}</td>`).join("");
+            return `<tr>${tds}</tr>`;
+          })
+          .join("");
+
+        //build the table
+        const table = `
+                <table>
+                    <thead>
+                        <tr>${headerRow}</tr>
+                    <thead>
+                    <tbody>
+                        ${rows}
+                    <tbody>
+                <table>`;
+
+        return table;
+      }
+
+      function formatTrackName(str) {
+        if (str.includes("-")) {
+          str = str.substring(0, str.indexOf("-") - 1);
+        }
+        return str;
+      }
+
+      function modifyMS(json) {
+        json.map((obj) => {
+          obj.timeListened = ms;
+          obj.timeListened = FormatMS(ms);
+        });
+      }
+
+      function FormatMS(ms) {
+        var milliseconds = parseInt((ms % 1000) / 100),
+          seconds = Math.floor((ms / 1000) % 60),
+          minutes = Math.floor((ms / (1000 * 60)) % 60),
+          hours = Math.floor(ms / (1000 * 60 * 60));
+
+        hours = hours < 10 ? "0" + hours : hours;
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        return hours + ":" + minutes + ":" + seconds;
+      }
+    </script>
+  </body>
+</html>

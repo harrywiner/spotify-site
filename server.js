@@ -299,4 +299,17 @@ app.get("/currently-playing", async (req, res) => {
     }
 
   });
+
+
+})
+app.get('/current-or-recent', (req, res) => {
+  request.get('/currently-playing', (error, response, body) => {
+    if (body) {
+      res.send(body)
+    } else {
+      request.get('http://localhost:8000/most-recent', (error, response, body) => {
+        res.send(body)
+      })
+    }
+  })
 })
